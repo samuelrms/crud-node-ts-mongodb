@@ -5,5 +5,5 @@ export interface User {
   email: string;
   cpf: string;
   password: string;
-  birth: Date;
+  birth: string;
 }
