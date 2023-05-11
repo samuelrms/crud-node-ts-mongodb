@@ -5,8 +5,8 @@ export interface HttpResponse<T> {
 
 export interface HttpRequest<B> {
   body?: B;
-  params?: any;
-  headers?: any;
+  params?: Record<string, string>;
+  headers?: Record<string, string>;
 }
 
 export interface Controller {
