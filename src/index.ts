@@ -6,6 +6,7 @@ import { homeRoute } from "./routes/home";
 import { createUserRoute } from "./routes/create-user";
 import { updateUserRoute } from "./routes/update-user";
 import { deleteUserRoute } from "./routes/delete-user";
+import { getUserByIDRoute } from "./routes/get-user-by-id";
 
 const main = async () => {
   config();
@@ -22,6 +23,8 @@ const main = async () => {
   app.patch("/users/:id", updateUserRoute());
 
   app.delete("/users/:id", deleteUserRoute());
+
+  app.get("/users/:id", getUserByIDRoute());
 
   const port = process.env.PORT || 3030;
 
