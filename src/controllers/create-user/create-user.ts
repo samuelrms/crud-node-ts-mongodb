@@ -8,12 +8,13 @@ import {
   validateBirth,
   validateCpf,
 } from "../../utils/validate";
+import { badRequest, createdRequest, serverErrorRequest } from "../helpers";
 
 export class CreateUserController implements Controller {
   constructor(private readonly createUserRepository: ICreateUserRepository) {}
   async handle(
     httpRequest: HttpRequest<CreateUserParams>,
-  ): Promise<HttpResponse<User>> {
+  ): Promise<HttpResponse<User | string>> {
     try {
       const { body } = httpRequest;
 
@@ -28,19 +29,18 @@ export class CreateUserController implements Controller {
 
       for (const field of requiredFields) {
         if (!body?.[field as keyof CreateUserParams]?.length) {
-          return {
-            statusCode: 400,
-            body: `Field ${field} is required`,
-          };
+          return badRequest(`Field ${field} is required`);
         }
       }
 
+      if (!httpRequest.body) return badRequest("Body is required");
+
       let errorMessage = "";
 
-      const emailIsValid = validator.isEmail(httpRequest.body!.email);
-      const cpfIsValid = validateCpf(httpRequest?.body!.cpf ?? "");
-      const birthIsValid = validateBirth(httpRequest?.body!.birth);
-      const strongPassword = isStrongPassword(httpRequest?.body!.password);
+      const emailIsValid = validator.isEmail(httpRequest.body?.email);
+      const cpfIsValid = validateCpf(httpRequest?.body?.cpf ?? "");
+      const birthIsValid = validateBirth(httpRequest?.body?.birth);
+      const strongPassword = isStrongPassword(httpRequest?.body?.password);
 
       if (!emailIsValid) errorMessage = "Email is invalid";
       if (!cpfIsValid) errorMessage = "cpf is invalid";
@@ -51,25 +51,14 @@ export class CreateUserController implements Controller {
           "The password must contain at least 8 characters, being alphanumeric and having a special character";
 
       if (errorMessage !== "") {
-        return {
-          statusCode: 400,
-          body: errorMessage,
-        };
+        return badRequest(errorMessage);
       }
 
-      const user = await this.createUserRepository.createUser(
-        httpRequest.body!,
-      );
+      const user = await this.createUserRepository.createUser(httpRequest.body);
 
-      return {
-        statusCode: 201,
-        body: user,
-      };
+      return createdRequest<User>(user);
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: `Something went wrong \n${error}`,
-      };
+      return serverErrorRequest(error);
     }
   }
 }
