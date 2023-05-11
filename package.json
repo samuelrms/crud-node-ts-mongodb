@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "nodemon --watch \"src/\" --exec \"ts-node src/index.ts\" -e ts",
     "start": "node build/index.js",
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --outDir build"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
