@@ -4,7 +4,7 @@ import {
 } from "../../controllers/create-user/protocols";
 import { MongoClient } from "../../database/mongo";
 import { User } from "../../models/user";
-import { MongoUser } from "../mongo-pretocols";
+import { MongoUser } from "../mongo-protocols";
 
 export class MongoCreateUserRepository implements ICreateUserRepository {
   async createUser(params: CreateUserParams): Promise<User> {

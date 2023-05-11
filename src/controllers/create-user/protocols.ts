@@ -1,5 +1,5 @@
 import { User } from "../../models/user";
-import { MongoUser } from "../../repositories/mongo-pretocols";
+import { MongoUser } from "../../repositories/mongo-protocols";
 
 export type CreateUserParams = MongoUser;
 
