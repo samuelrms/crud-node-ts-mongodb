@@ -16,6 +16,14 @@ const main = async () => {
   app.use(express.json());
   await MongoClient.connect();
 
+  app.get("/", (_, res) => {
+    res
+      .status(200)
+      .send(
+        "Welcome to the users CRUD developed by Samuel Ramos, at the moment we only have the '/users' route",
+      );
+  });
+
   app.get("/users", async (_, res) => {
     const mongoGetUsersRepository = new MongoGetUsersRepository();
     const getUsersController = new GetUsersController(mongoGetUsersRepository);
